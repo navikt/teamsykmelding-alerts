@@ -1,4 +1,4 @@
-name: deploy
+name: Deploy to NAIS
 on:
   push:
     branches:
@@ -8,7 +8,7 @@ jobs:
     name: deploy prod
     runs-on: ubuntu-latest
     steps:
-      - name: checkout code
+      - name: Checkout code
         uses: actions/checkout@v1
       - name: deploy to prod-fss
           uses: navikt/deployment-cli/action@a260e84
@@ -17,4 +17,4 @@ jobs:
           with:
             cluster: prod-fss
             team: teamsykefravr
-            resource: sykmeldingalerts.yaml
+            resource: nais/sykmeldingalerts.yaml
