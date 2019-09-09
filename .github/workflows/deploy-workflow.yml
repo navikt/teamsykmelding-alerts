@@ -16,7 +16,6 @@ jobs:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           with:
             cluster: prod-fss
-            repository: navikt/sykmelding-alerts
             team: teamsykefravr
             resource: nais/sykmeldingalerts.yaml
             token: ${GITHUB_TOKEN}
