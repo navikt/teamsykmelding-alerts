@@ -6,18 +6,12 @@ For mer informasjon om hvordan alarmene fungere se:
 `https://github.com/nais/doc/tree/master/content/alerts`
 
 ### For NAV ansatte
-Vi er tilgjenngelig på slack kanalen #team-sykemdling
+Vi er tilgjenngelig på slack kanalen #team-sykmelding
 
 ## Utvikling:
-En kan bruke `https://prometheus.nais.preprod.local/graph` som hjelp til å teste queries. 
-Bruk `test/sykemelding_test.yaml` til å teste alerteren i dev. 
-Varsel dukker da opp i `sykemelding-alerts-dev` på Slack
-
-### Deploy test:
-Deploy alerten din til riktig cluster i preprod:
-`kubectl apply -f test/sykemelding_test.yaml`
-
-Om alerten allerede finnes må den fjernes først:
-`kubectl delete alert sykemeldingalerts-test`
+En kan bruke `https://prometheus.nais.preprod.local/graph` som hjelp til å teste queries.
 
 ### Deploy prod:
+All kode som blir deployet til master deployes til prod
+Kan gjøres manuelt med følgende kommando:
+`kubectl apply --context prod-fss --namespace default -f sykmeldingalerts.yaml`
