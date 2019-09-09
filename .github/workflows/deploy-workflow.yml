@@ -15,12 +15,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo $GITHUB_TOKEN
-          env
-          env |grep -i github
           docker run -v $GITHUB_WORKSPACE:/workspace navikt/deployment-cli deployment-cli deploy create \
             --cluster=prod-fss \
             --repository=navikt/sykmelding-alerts \
             --team=teamsykefravr \
-            --resource=sykmeldingalerts.yaml \
+            --resource=/workspace/sykmeldingalerts.yaml \
             --token=${GITHUB_TOKEN}
