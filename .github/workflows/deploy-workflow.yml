@@ -11,11 +11,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v1
       - name: deploy to prod-fss
-          uses: navikt/deployment-cli/action@a260e84
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          with:
-            cluster: prod-fss
-            team: teamsykefravr
-            resource: nais/sykmeldingalerts.yaml
-            token: ${GITHUB_TOKEN}
+        uses: navikt/deployment-cli/action@a260e84
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          cluster: prod-fss
+          team: teamsykefravr
+          resource: nais/sykmeldingalerts.yaml
+          token: ${GITHUB_TOKEN}
