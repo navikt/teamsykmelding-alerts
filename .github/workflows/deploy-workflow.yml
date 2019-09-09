@@ -8,13 +8,19 @@ jobs:
     name: deploy prod
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - name: checkout code
+        uses: actions/checkout@v1
       - name: deploy to prod
         uses: nais/deploy@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          cluster: prod-fss
-          repository: navikt/sykmelding-alerts
-          team: teamsykefravr
-          resource: sykmeldingalerts.yaml
+        run: |
+          echo $GITHUB_TOKEN
+          env
+          env |grep -i github
+          docker run -v $GITHUB_WORKSPACE:/workspace navikt/deployment-cli deployment-cli deploy create \
+            --cluster=prod-fss \
+            --repository=navikt/sykmelding-alerts \
+            --team=teamsykefravr \
+            --resource=sykmeldingalerts.yaml \
+            --token=${GITHUB_TOKEN}
