@@ -17,5 +17,4 @@ jobs:
         with:
           cluster: prod-fss
           team: teamsykefravr
-          resource: nais/sykmeldingalerts.yaml
-          token: ${GITHUB_TOKEN}
+          resource: sykmeldingalerts.yaml
