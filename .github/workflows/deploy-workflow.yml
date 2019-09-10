@@ -17,4 +17,4 @@ jobs:
         with:
           cluster: prod-fss
           team: teamsykefravr
-          resource: sykmeldingalerts.yaml
+          raw-resource: sykmeldingalerts.yaml
