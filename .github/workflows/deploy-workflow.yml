@@ -13,7 +13,8 @@ jobs:
       - name: deploy to prod-fss
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: | docker run -v $GITHUB_WORKSPACE:/workspace navikt/deployment-cli deployment-cli deploy create \
+        run: |
+        docker run -v $GITHUB_WORKSPACE:/workspace navikt/deployment-cli deployment-cli deploy create \
             --cluster=dev-fss \
             --repository=navikt/sykmelding-alerts \
             --team=teamsykefravr \
