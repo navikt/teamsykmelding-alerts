@@ -18,21 +18,21 @@ spec:
       sla: respond within 1h, during office hours
       severity: danger
     - alert: syfosm-asynkron-app-nede
-      expr: up{app=~"syfosmoppgave|syfosmarena|syfosmvarsel|syfosminfotrygd|syfosmsak|syfosmmottak|syfosmapprec",job="kubernetes-pods"} == 0
+      expr: up{app=~"syfosmoppgave|syfosmarena|syfosmvarsel|syfosminfotrygd|syfosmsak|syfosmmottak|syfosmapprec|syfosmpapirmottak",job="kubernetes-pods"} == 0
       for: 10m
       description: "{{ $labels.app }} er nede i {{ $labels.kubernetes_namespace }}"
       action: "Se `kubectl describe pod {{ $labels.kubernetes_pod_name }}` for events, og `kubectl logs {{ $labels.kubernetes_pod_name }}` for logger"
       sla: respond within 1h, during office hours
       severity: danger
     - alert: syfosm-kontinuerlig-restart
-      expr: sum(increase(kube_pod_container_status_restarts_total{container=~"syfosmregler|syfosminfotrygd|syfosmregister|syfosmoppgave|syfosmarena|syfosmvarsel|syfosmsak|syfosmmottak|syfosmapprec"}[30m])) by (container) > 2
+      expr: sum(increase(kube_pod_container_status_restarts_total{container=~"syfosmregler|syfosminfotrygd|syfosmregister|syfosmoppgave|syfosmarena|syfosmvarsel|syfosmsak|syfosmmottak|syfosmapprec|syfosmpapirmottak"}[30m])) by (container) > 2
       for: 5m
       description: "{{ $labels.container }} har restartet flere ganger siste halvtimen!"
       action: "Se `kubectl describe pod {{ $labels.container }}` for events, og `kubectl logs {{ $labels.container }}` for logger"
       sla: respond within 1h, during office hours
       severity: danger
     - alert: syfosm-mangler-metrikker
-      expr: absent(up{app=~"syfosmoppgave|syfosmarena|syfosmvarsel|syfosminfotrygd|syfosmregister|syfosmsak|syfosmmottak|syfosmregler|syfohelsenettproxy|syfosmapprec",job="kubernetes-pods"})
+      expr: absent(up{app=~"syfosmoppgave|syfosmarena|syfosmvarsel|syfosminfotrygd|syfosmregister|syfosmsak|syfosmmottak|syfosmregler|syfohelsenettproxy|syfosmapprec|syfosmpapirmottak",job="kubernetes-pods"})
       for: 5m
       description: "{{ $labels.app }} rapporterer ingen metrikker i {{ $labels.kubernetes_namespace }}"
       action: "Sjekk om {{ $labels.app }} i {{ $labels.kubernetes_namespace }} er oppe"
