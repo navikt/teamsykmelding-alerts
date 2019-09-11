@@ -18,5 +18,5 @@ jobs:
             --cluster=prod-fss \
             --repository=navikt/sykmelding-alerts \
             --team=teamsykefravr \
-            --raw-resource=/workspace/sykmeldingalerts.yaml \
+            --no-template-resource=/workspace/sykmeldingalerts.yaml \
             --token=${GITHUB_TOKEN}
