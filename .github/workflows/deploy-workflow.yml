@@ -1,20 +1,20 @@
-name: Deploy to NAIS
+name: Deploy sykmelding alert to NAIS
 on:
   push:
     branches:
       - master
 jobs:
   deploy_prod:
-    name: deploy prod
+    name: Deploy alert til prod
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v1
-      - name: deploy to prod-fss
+      - name: Call deployment-cli and apply yaml file to prod-fss
         uses: navikt/deployment-cli/action@a260e84
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           cluster: prod-fss
           team: teamsykefravr
-          resource: sykmeldingalerts.yaml
+          no-template-resource: sykmeldingalerts.yaml
