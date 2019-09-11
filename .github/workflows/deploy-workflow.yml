@@ -11,12 +11,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v1
       - name: Call deployment-cli and apply yaml file to prod-fss
+        uses: navikt/deployment-cli/action@a260e84
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          docker run -v $GITHUB_WORKSPACE:/workspace navikt/deployment-cli deployment-cli deploy create \
-            --cluster=prod-fss \
-            --repository=navikt/sykmelding-alerts \
-            --team=teamsykefravr \
-            --no-template-resource=/workspace/sykmeldingalerts.yaml \
-            --token=${GITHUB_TOKEN}
+        with:
+          cluster: prod-fss
+          team: teamsykefravr
+          resource: sykmeldingalerts.yaml
