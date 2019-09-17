@@ -9,7 +9,7 @@ For mer informasjon om hvordan alarmene fungere se:
 En kan bruke `https://prometheus.nais.preprod.local/graph` som hjelp til å teste queries.
 
 ### Deploy prod:
-All kode som blir er i master går til prod, når github actions pipeline er satt opp
+All kode som blir er i master går til prod, når github actions er oppe og går
 Kan i mellomtiden gjøres manuelt med følgende kommando:
 `kubectl apply --context prod-fss --namespace default -f sykmeldingalerts.yaml`
 
