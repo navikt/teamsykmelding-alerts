@@ -1,6 +1,6 @@
-{{=<??>=}}
-apiVersion: "nais.io/v1alpha1"
-kind: "Alert"
+{{=<? ?>=}}
+apiVersion: nais.io/v1alpha1
+kind: Alert
 metadata:
   name: sykmeldingalerts
   labels:
@@ -9,7 +9,6 @@ spec:
   receivers:
     slack:
       channel: '#sykmelding-alerts'
-      #prependText: '<!here> | '
   alerts:
     - alert: syfosm-app-nede
       expr: up{app=~"syfosmregler|syfosmregister|syfotekster|syfohelsenettproxy|syfosmpapirregler",job="kubernetes-pods"} == 0
