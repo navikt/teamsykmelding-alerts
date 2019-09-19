@@ -52,7 +52,7 @@ spec:
       sla: respond within 1h, during office hours
       severity: danger
     - alert: syfosminfotrygd-smikkeokko
-      expr: syfosminfotrygd_smikkeok_gauge{log_app=~"syfosminfotrygd"}[5m] > 0
+      expr: syfosminfotrygd_smikkeok_gauge{log_app=~"syfosminfotrygd"} > 0
       for: 3m
       description: "Meldinger er kommet inn på QA.P414.AS07_SMIKKEOK"
       action: "Sjekk mq køen: QA.P414.AS07_SMIKKEOK, og se på meldinge som har lagt seg der, og kontakt infotrygd teamet, få å finne ut hvorfor den har blitt lagt der"
