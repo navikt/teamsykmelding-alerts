@@ -17,21 +17,21 @@ spec:
       sla: respond within 1h, during office hours
       severity: danger
     - alert: syfosm-asynkron-app-nede
-      expr: up{app=~"syfosmoppgave|syfosmarena|syfosmvarsel|syfosminfotrygd|syfosmsak|syfosmmottak|syfosmapprec|syfosmpapirmottak",job="kubernetes-pods"} == 0
+      expr: up{app=~"syfosmoppgave|syfosmarena|syfosmvarsel|syfosminfotrygd|syfosmsak|syfosmmottak|syfosmapprec|syfosmpapirmottak|syfovarsel",job="kubernetes-pods"} == 0
       for: 10m
       description: "{{ $labels.app }} er nede i {{ $labels.kubernetes_namespace }}"
       action: "Se `kubectl describe pod {{ $labels.kubernetes_pod_name }}` for events, og `kubectl logs {{ $labels.kubernetes_pod_name }}` for logger"
       sla: respond within 1h, during office hours
       severity: danger
     - alert: syfosm-kontinuerlig-restart
-      expr: sum(increase(kube_pod_container_status_restarts_total{container=~"syfosmregler|syfosminfotrygd|syfosmregister|syfosmoppgave|syfosmarena|syfosmvarsel|syfosmsak|syfosmmottak|syfosmapprec|syfosmpapirmottak|syfosmpapirregler"}[30m])) by (container) > 2
+      expr: sum(increase(kube_pod_container_status_restarts_total{container=~"syfosmregler|syfosminfotrygd|syfosmregister|syfosmoppgave|syfosmarena|syfosmvarsel|syfosmsak|syfosmmottak|syfosmapprec|syfosmpapirmottak|syfosmpapirregler|syfovarsel"}[30m])) by (container) > 2
       for: 5m
       description: "{{ $labels.container }} har restartet flere ganger siste halvtimen!"
       action: "Se `kubectl describe pod {{ $labels.container }}` for events, og `kubectl logs {{ $labels.container }}` for logger"
       sla: respond within 1h, during office hours
       severity: danger
     - alert: syfosm-mangler-metrikker
-      expr: absent(up{app=~"syfosmoppgave|syfosmarena|syfosmvarsel|syfosminfotrygd|syfosmregister|syfosmsak|syfosmmottak|syfosmregler|syfohelsenettproxy|syfosmapprec|syfosmpapirmottak|syfosmpapirregler",job="kubernetes-pods"})
+      expr: absent(up{app=~"syfosmoppgave|syfosmarena|syfosmvarsel|syfosminfotrygd|syfosmregister|syfosmsak|syfosmmottak|syfosmregler|syfohelsenettproxy|syfosmapprec|syfosmpapirmottak|syfosmpapirregler|syfovarsel",job="kubernetes-pods"})
       for: 5m
       description: "{{ $labels.app }} rapporterer ingen metrikker i {{ $labels.kubernetes_namespace }}"
       action: "Sjekk om {{ $labels.app }} i {{ $labels.kubernetes_namespace }} er oppe"
@@ -51,8 +51,20 @@ spec:
       action: "Sjekk hvorfor {{ $labels.log_app }} har i løpet av dei siste 5 minuttene logget Error"
       sla: respond within 1h, during office hours
       severity: danger
+    - alert: syfo-errorlogging
+      expr: (100 * sum by (log_app) (rate(logd_messages_total{log_app=~"syfovarsel",log_level="Error"}[5m])) / sum by (log_app) (rate(logd_messages_total{log_app=~"syfovarsel"}[5m]))) > 10
+      for: 3m
+      description: "{{ $labels.log_app }} rapporterer error i loggene"
+      action: "Sjekk loggene til {{ $labels.log_app }} for å se hvorfor det er så mye feil"
     - alert: syfosminfotrygd-smikkeokko
       expr: syfosminfotrygd_smikkeok_gauge{log_app=~"syfosminfotrygd"} > 0
       for: 3m
       description: "Meldinger er kommet inn på QA.P414.AS07_SMIKKEOK"
       action: "Sjekk mq køen: QA.P414.AS07_SMIKKEOK, og se på meldinge som har lagt seg der, og kontakt infotrygd teamet, få å finne ut hvorfor den har blitt lagt der"
+    - alert: syfovarsel-lytter-stoppet
+      expr: sum(increase(syfovarsel_kafkalytter_stoppet_total[30m])) > 10
+      for: 10m
+      description: "{{ $labels.app }} sin kafkalytter har stoppet"
+      action: "Kafkalytter stoppet på syfovarsel. Sjekk logger, og evt. `kubectl delete pod {{ $labels.kubernetes_pod_name }}` for å restarte"
+      sla: respond within 1h, during office hours
+      severity: danger
