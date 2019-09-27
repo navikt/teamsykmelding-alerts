@@ -9,8 +9,8 @@ For mer informasjon om hvordan alarmene fungere se:
 En kan bruke `https://prometheus.nais.preprod.local/graph` som hjelp til å teste queries.
 
 ### Deploy prod:
-Alle kode som er i master går til prod,
-kan evt gjøres manuelt med følgende kommando:
+Alle kode som er i master går til prod-fss
+Dette kan evt gjøres manuelt med følgende kommando:
 `kubectl apply --context prod-fss --namespace default -f sykmeldingalerts.yaml`
 
 ### For NAV ansatte
