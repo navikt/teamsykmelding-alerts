@@ -38,7 +38,7 @@ spec:
       sla: respond within 1h, during office hours
       severity: danger
     - alert: syfosmmottak-ugyldige-sykmeldinger
-      expr: sum(syfosmmottak_invalid_message_no_notice_count) > 100
+      expr: sum(syfosmmottak_invalid_message_no_notice_count) > 50
       for: 10m
       description: "Syfosmmottak har mottatt unormalt mange ugyldige sykmeldinger"
       action: "Sjekk logger, og om det kan ha blitt innført feil"
@@ -66,5 +66,12 @@ spec:
       for: 10m
       description: "{{ $labels.app }} sin kafkalytter har stoppet"
       action: "Kafkalytter stoppet på syfovarsel. Sjekk logger, og evt. `kubectl delete pod {{ $labels.kubernetes_pod_name }}` for å restarte"
+      sla: respond within 1h, during office hours
+      severity: danger
+  - alert: syfosmregler-avisst-sykmeldinger
+      expr: sum(increase(syfosmregler_rule_hit_status_counter{app=~"syfosmregler",rule_status="INVALID"}[30m])) by (rule_status) > 50
+      for: 10m
+      description: "Syfosmregler har mottatt unormalt mange avisste sykmeldinger"
+      action: "Sjekk logger, og om det kan ha blitt innført feil"
       sla: respond within 1h, during office hours
       severity: danger
