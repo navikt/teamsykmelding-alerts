@@ -68,7 +68,7 @@ spec:
       action: "Kafkalytter stoppet på syfovarsel. Sjekk logger, og evt. `kubectl delete pod {{ $labels.kubernetes_pod_name }}` for å restarte"
       sla: respond within 1h, during office hours
       severity: danger
-  - alert: syfosmregler-avisst-sykmeldinger
+    - alert: syfosmregler-avisst-sykmeldinger
       expr: sum(increase(syfosmregler_rule_hit_status_counter{app=~"syfosmregler",rule_status="INVALID"}[30m])) by (rule_status) > 50
       for: 10m
       description: "Syfosmregler har mottatt unormalt mange avisste sykmeldinger"
