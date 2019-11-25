@@ -69,7 +69,7 @@ spec:
       sla: respond within 1h, during office hours
       severity: danger
     - alert: syfosmregler-avisst-sykmeldinger
-      expr: sum(increase(syfosmregler_rule_hit_status_counter{app=~"syfosmregler",rule_status="INVALID"}[30m])) by (rule_status) > 70
+      expr: sum(increase(syfosmregler_rule_hit_status_counter{app=~"syfosmregler",rule_status="INVALID"}[20m])) by (rule_status) > 70
       for: 10m
       description: "Syfosmregler har mottatt unormalt mange avisste sykmeldinger"
       action: "Sjekk logger, og om det kan ha blitt innført feil"
