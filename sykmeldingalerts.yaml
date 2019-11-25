@@ -38,7 +38,7 @@ spec:
       sla: respond within 1h, during office hours
       severity: danger
     - alert: syfosmmottak-ugyldige-sykmeldinger
-      expr: sum(syfosmmottak_invalid_message_no_notice_count) > 100
+      expr: sum(syfosmmottak_invalid_message_no_notice_count) > 200
       for: 10m
       description: "Syfosmmottak har mottatt unormalt mange ugyldige sykmeldinger"
       action: "Sjekk logger, og om det kan ha blitt innført feil"
