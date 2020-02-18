@@ -1,3 +1,5 @@
+[![Build status](https://github.com/navikt/sykmelding-alerts/workflows/Deploy%20to%20dev%20and%20prod/badge.svg)](https://github.com/navikt/sykmelding-alerts/workflows/Deploy%20to%20dev%20and%20prod/badge.svg)
+
 # sykmelding-alerts
 
 Lager alerts for team sykmelding sine apper
