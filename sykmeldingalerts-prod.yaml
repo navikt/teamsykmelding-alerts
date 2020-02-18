@@ -10,7 +10,7 @@ spec:
       channel: '#sykmelding-alerts'
   alerts:
     - alert: syfosm-app-nede
-      expr: up{app=~"syfosmregler|syfosmregister|syfotekster|syfohelsenettproxy|syfosmpapirregler|syfosmmanuell-backend|syfosmmanuell",job="kubernetes-pods"} == 0
+      expr: up{app=~"syfosmregler|syfosmregister|syfotekster|syfohelsenettproxy|syfosmpapirregler|syfosmmanuell-backend",job="kubernetes-pods"} == 0
       for: 2m
       description: "{{ $labels.app }} er nede i {{ $labels.kubernetes_namespace }}"
       action: "Se `kubectl describe pod {{ $labels.kubernetes_pod_name }}` for events, og `kubectl logs {{ $labels.kubernetes_pod_name }}` for logger"
