@@ -76,7 +76,7 @@ spec:
       sla: respond within 1h, during office hours
       severity: danger
     - alert: syfosminfotrygd-mange-manuelle-oppg
-      expr: (100 * sum(rate(syfosminfotrygd_rule_hit_status_counter{rule_status="MANUAL_PROCESSING"}[10m])) / sum(rate(syfosminfotrygd_rule_hit_status_counter[10m]))) > 90
+      expr: (100 * sum(rate(syfosminfotrygd_rule_hit_status_counter{rule_status="MANUAL_PROCESSING"}[10m])) / sum(rate(syfosminfotrygd_rule_hit_status_counter[10m]))) > 200
       for: 10m
       description: "Syfosminfotrygd oppretter unormalt mange oppgaver"
       action: "Sjekk logger, kanskje Infotrygd har problemer"
