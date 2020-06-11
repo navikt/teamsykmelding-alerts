@@ -10,28 +10,28 @@ spec:
       channel: '#sykmelding-alerts'
   alerts:
     - alert: syfosm-app-nede
-      expr: kube_deployment_status_replicas_available{deployment=~"syfosmregler|syfosmregister|syfotekster|syfohelsenettproxy|syfosmpapirregler|syfosmmanuell-backend|syfosmmanuell|sykmeldinger-backend|egenmeldt-sykmelding-backend"} == 0
+      expr: kube_deployment_status_replicas_available{deployment=~"syfosmregler|syfosmregister|syfotekster|syfohelsenettproxy|syfosmpapirregler|syfosmmanuell-backend|syfosmmanuell|sykmeldinger-backend|egenmeldt-sykmelding-backend|pale-2-regler"} == 0
       for: 2m
       description: "{{ $labels.deployment }} er nede"
       action: "Se `kubectl kubectl get pod  | grep {{ $labels.deployment }}` for å se podder, og `kubectl logs $podnavn` for logger"
       sla: respond within 1h, during office hours
       severity: danger
     - alert: syfosm-asynkron-app-nede
-      expr: kube_deployment_status_replicas_available{deployment=~"syfosmoppgave|syfoservice-mq-producer|syfosmarena|syfosmvarsel|syfosminfotrygd|syfosmsak|syfosmmottak|syfosmapprec|syfosmpapirmottak|syfovarsel|pale-2|pale-2-sak|helse-sykmelding-router|pale-2-register"} == 0
+      expr: kube_deployment_status_replicas_available{deployment=~"syfosmoppgave|syfoservice-mq-producer|syfosmarena|syfosmvarsel|syfosminfotrygd|syfosmsak|syfosmmottak|syfosmapprec|syfosmpapirmottak|syfovarsel|pale-2|pale-2-sak|pale-2-register"} == 0
       for: 10m
       description: "{{ $labels.deployment }} er nede"
       action: "Se `kubectl kubectl get pod  | grep {{ $labels.deployment }}` for å se podder, og `kubectl logs $podnavn` for logger"
       sla: respond within 1h, during office hours
       severity: danger
     - alert: syfosm-kontinuerlig-restart
-      expr: sum(increase(kube_pod_container_status_restarts_total{container=~"syfosmregler|syfoservice-mq-producer|syfosminfotrygd|syfosmregister|syfosmoppgave|syfosmarena|syfosmvarsel|syfosmsak|syfosmmottak|syfosmapprec|syfosmpapirmottak|syfosmpapirregler|syfovarsel|syfosmmanuell-backend|syfosmmanuell|sykmeldinger-backend|pale-2|pale-2-sak|helse-sykmelding-router|pale-2-register|egenmeldt-sykmelding-backend"}[30m])) by (container) > 2
+      expr: sum(increase(kube_pod_container_status_restarts_total{container=~"syfosmregler|syfoservice-mq-producer|syfosminfotrygd|syfosmregister|syfosmoppgave|syfosmarena|syfosmvarsel|syfosmsak|syfosmmottak|syfosmapprec|syfosmpapirmottak|syfosmpapirregler|syfovarsel|syfosmmanuell-backend|syfosmmanuell|sykmeldinger-backend|pale-2|pale-2-sak|pale-2-register|pale-2-regler|egenmeldt-sykmelding-backend"}[30m])) by (container) > 2
       for: 5m
       description: "{{ $labels.container }} har restartet flere ganger siste halvtimen!"
       action: "Se `kubectl describe pod {{ $labels.container }}` for events, og `kubectl logs {{ $labels.container }}` for logger"
       sla: respond within 1h, during office hours
       severity: danger
     - alert: syfosm-mangler-metrikker
-      expr: absent(up{app=~"syfosmoppgave|syfoservice-mq-producer|syfosmarena|syfosmvarsel|syfosminfotrygd|syfosmregister|syfosmsak|syfosmmottak|syfosmregler|syfohelsenettproxy|syfosmapprec|syfosmpapirmottak|syfosmpapirregler|syfovarsel|syfosmmanuell-backend|sykmeldinger-backend|pale-2|pale-2-sak|helse-sykmelding-router|egenmeldt-sykmelding-backend",job="kubernetes-pods"})
+      expr: absent(up{app=~"syfosmoppgave|syfoservice-mq-producer|syfosmarena|syfosmvarsel|syfosminfotrygd|syfosmregister|syfosmsak|syfosmmottak|syfosmregler|syfohelsenettproxy|syfosmapprec|syfosmpapirmottak|syfosmpapirregler|syfovarsel|syfosmmanuell-backend|sykmeldinger-backend|pale-2|pale-2-sak|pale-2-regler|egenmeldt-sykmelding-backend",job="kubernetes-pods"})
       for: 5m
       description: "{{ $labels.app }} rapporterer ingen metrikker i {{ $labels.kubernetes_namespace }}"
       action: "Sjekk om {{ $labels.app }} i {{ $labels.kubernetes_namespace }} er oppe"
@@ -45,7 +45,7 @@ spec:
       sla: respond within 1h, during office hours
       severity: danger
     - alert: syfosm-error-logging
-      expr: sum(rate(logd_messages_total{log_app=~"syfosmoppgave|syfoservice-mq-producer|syfosmarena|syfosmvarsel|syfosminfotrygd|syfosmregister|syfosmsak|syfosmmottak|syfosmregler|syfohelsenettproxy|syfosmapprec|syfosmpapirmottak|syfosmpapirregler|syfosmmanuell-backend|syfosmmanuell|sykmeldinger-backend|pale-2|pale-2-sak|helse-sykmelding-router|pale-2-register|egenmeldt-sykmelding-backend",log_level="Error",job="kubernetes-pods"}[5m])) by (log_app) > 0
+      expr: sum(rate(logd_messages_total{log_app=~"syfosmoppgave|syfoservice-mq-producer|syfosmarena|syfosmvarsel|syfosminfotrygd|syfosmregister|syfosmsak|syfosmmottak|syfosmregler|syfohelsenettproxy|syfosmapprec|syfosmpapirmottak|syfosmpapirregler|syfosmmanuell-backend|syfosmmanuell|sykmeldinger-backend|pale-2|pale-2-sak|pale-2-register|pale-2-regler|egenmeldt-sykmelding-backend",log_level="Error",job="kubernetes-pods"}[5m])) by (log_app) > 0
       for: 5m
       description: "{{ $labels.log_app }} rapporterer error i loggene"
       action: "Sjekk hvorfor {{ $labels.log_app }} har i løpet av dei siste 5 minuttene logget Error"
@@ -80,5 +80,12 @@ spec:
       for: 10m
       description: "Syfosminfotrygd oppretter unormalt mange oppgaver"
       action: "Sjekk logger, kanskje Infotrygd har problemer"
+      sla: respond within 1h, during office hours
+      severity: danger
+    - alert: pale-2-ugyldige-legeerklaeringer
+      expr: sum(increase(pale2_invalid_message_no_notice_count[10m])) > 20
+      for: 10m
+      description: "Pale-2 har mottatt unormalt mange ugyldige legeerklæringer"
+      action: "Sjekk logger, og om det kan ha blitt innført feil"
       sla: respond within 1h, during office hours
       severity: danger
