@@ -11,7 +11,7 @@ spec:
       channel: '#sykmelding-alerts-dev'
   alerts:
     - alert: syfosm-app-nede
-      expr: kube_deployment_status_replicas_available{deployment=~"syfosmregler|syfosmregister|syfotekster|syfohelsenettproxy|syfosmpapirregler|syfosmmanuell-backend|syfosmmanuell"} == 0
+      expr: kube_deployment_status_replicas_available{deployment=~"syfosmregler|syfosmregister|syfotekster|syfohelsenettproxy|syfosmpapirregler|syfosmmanuell-backend|syfosmmanuell|smregistrering|smregistrering-backend"} == 0
       for: 2m
       description: "{{ $labels.deployment }} er nede"
       action: "Se `kubectl kubectl get pod  | grep {{ $labels.deployment }}` for å se podder, og `kubectl logs $podnavn` for logger"
@@ -25,14 +25,14 @@ spec:
       sla: respond within 1h, during office hours
       severity: danger
     - alert: syfosm-kontinuerlig-restart
-      expr: sum(increase(kube_pod_container_status_restarts_total{container=~"syfosmregler|syfoservice-mq-producer|syfosminfotrygd|syfosmregister|syfosmoppgave|syfosmarena|syfosmvarsel|syfosmsak|syfosmmottak|syfosmapprec|syfosmpapirmottak|syfosmpapirregler|syfovarsel|syfosmmanuell-backend|syfosmmanuell|pale-2|pale-2-sak|helse-sykmelding-router|pale-2-register|sparenaproxy"}[30m])) by (container) > 2
+      expr: sum(increase(kube_pod_container_status_restarts_total{container=~"syfosmregler|syfoservice-mq-producer|syfosminfotrygd|syfosmregister|syfosmoppgave|syfosmarena|syfosmvarsel|syfosmsak|syfosmmottak|syfosmapprec|syfosmpapirmottak|syfosmpapirregler|syfovarsel|syfosmmanuell-backend|syfosmmanuell|pale-2|pale-2-sak|helse-sykmelding-router|pale-2-register|sparenaproxy|smregistrering|smregistrering-backend"}[30m])) by (container) > 2
       for: 5m
       description: "{{ $labels.container }} har restartet flere ganger siste halvtimen!"
       action: "Se `kubectl describe pod {{ $labels.container }}` for events, og `kubectl logs {{ $labels.container }}` for logger"
       sla: respond within 1h, during office hours
       severity: danger
     - alert: syfosm-mangler-metrikker
-      expr: absent(up{app=~"syfosmoppgave|syfoservice-mq-producer|syfosmarena|syfosmvarsel|syfosminfotrygd|syfosmregister|syfosmsak|syfosmmottak|syfosmregler|syfohelsenettproxy|syfosmapprec|syfosmpapirmottak|syfosmpapirregler|syfovarsel|syfosmmanuell-backend|pale-2|pale-2-sak|pale-2-register|sparenaproxy",job="kubernetes-pods"})
+      expr: absent(up{app=~"syfosmoppgave|syfoservice-mq-producer|syfosmarena|syfosmvarsel|syfosminfotrygd|syfosmregister|syfosmsak|syfosmmottak|syfosmregler|syfohelsenettproxy|syfosmapprec|syfosmpapirmottak|syfosmpapirregler|syfovarsel|syfosmmanuell-backend|pale-2|pale-2-sak|pale-2-register|sparenaproxy|smregistrering-backend",job="kubernetes-pods"})
       for: 5m
       description: "{{ $labels.app }} rapporterer ingen metrikker i {{ $labels.kubernetes_namespace }}"
       action: "Sjekk om {{ $labels.app }} i {{ $labels.kubernetes_namespace }} er oppe"
@@ -46,7 +46,7 @@ spec:
       sla: respond within 1h, during office hours
       severity: danger
     - alert: syfosm-error-logging
-      expr: sum(rate(logd_messages_total{log_app=~"syfosmoppgave|syfoservice-mq-producer|syfosmarena|syfosmvarsel|syfosminfotrygd|syfosmregister|syfosmsak|syfosmmottak|syfosmregler|syfohelsenettproxy|syfosmapprec|syfosmpapirmottak|syfosmpapirregler|syfosmmanuell-backend|syfosmmanuell|pale-2|pale-2-sak|helse-sykmelding-router|pale-2-register|sparenaproxy",log_level="Error",job="kubernetes-pods"}[5m])) by (log_app) > 0
+      expr: sum(rate(logd_messages_total{log_app=~"syfosmoppgave|syfoservice-mq-producer|syfosmarena|syfosmvarsel|syfosminfotrygd|syfosmregister|syfosmsak|syfosmmottak|syfosmregler|syfohelsenettproxy|syfosmapprec|syfosmpapirmottak|syfosmpapirregler|syfosmmanuell-backend|syfosmmanuell|pale-2|pale-2-sak|helse-sykmelding-router|pale-2-register|sparenaproxy|smregistrering|smregistrering-backend",log_level="Error",job="kubernetes-pods"}[5m])) by (log_app) > 0
       for: 5m
       description: "{{ $labels.log_app }} rapporterer error i loggene"
       action: "Sjekk hvorfor {{ $labels.log_app }} har i løpet av dei siste 5 minuttene logget Error"
