@@ -1,15 +1,15 @@
-name: Deploy to dev
+name: Deploy alerts to gcp-dev
 on:
   push:
     branches:
       - '*'
       - '!master'
     paths:
-      - .github/workflows/devdeploy.yaml
-      - sykmeldingalerts-dev.yaml
+      - .github/workflows/gcp-dev.yaml
+      - sykmeldingalerts-gcp-dev.yaml
 jobs:
-  deploy_dev:
-    name: Deploy alert til dev
+  deploy:
+    name: Deploy
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -18,5 +18,5 @@ jobs:
         uses: nais/deploy/actions/deploy@master
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-          CLUSTER: dev-fss
-          RESOURCE: sykmeldingalerts-dev.yaml
+          CLUSTER: dev-gcp
+          RESOURCE: sykmeldingalerts-gcp-dev.yaml
