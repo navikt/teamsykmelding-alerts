@@ -5,7 +5,7 @@ on:
       - '*'
       - '!master'
     paths:
-      - .github/workflows/gcp-dev.yaml
+      - .github/workflows/gcp-dev.yml
       - sykmeldingalerts-gcp-dev.yaml
 jobs:
   deploy:
