@@ -17,12 +17,12 @@ jobs:
       - name: Deploy to dev
         uses: nais/deploy/actions/deploy@master
         env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          APIKEY: ${{ secrets.NAIS_TEAMSYKMELDING_DEPLOY_KEY }}
           CLUSTER: dev-gcp
           RESOURCE: sykmeldingalerts-gcp-dev.yaml
       - name: Deploy to prod
         uses: nais/deploy/actions/deploy@master
         env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          APIKEY: ${{ secrets.NAIS_TEAMSYKMELDING_DEPLOY_KEY }}
           CLUSTER: prod-gcp
           RESOURCE: sykmeldingalerts-gcp-prod.yaml
