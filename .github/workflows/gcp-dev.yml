@@ -9,7 +9,7 @@ on:
       - sykmeldingalerts-gcp-dev.yaml
 jobs:
   deploy:
-    name: Deploy
+    name: Deploy to dev
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
