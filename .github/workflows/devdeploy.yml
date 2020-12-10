@@ -4,6 +4,9 @@ on:
     branches:
       - '*'
       - '!master'
+    paths:
+      - .github/workflows/devdeploy.yaml
+      - sykmeldingalerts-dev.yaml
 jobs:
   deploy_dev:
     name: Deploy alert til dev

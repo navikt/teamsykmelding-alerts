@@ -1,0 +1,28 @@
+name: Deploy alerts to gcp
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - .github/workflows/gcp-deploy.yml
+      - sykmeldingalerts-gcp-prod.yaml
+      - sykmeldingalerts-gcp-dev.yaml
+jobs:
+  deploy:
+    name: Deploy to dev and prod
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@master
+      - name: Deploy to dev
+        uses: nais/deploy/actions/deploy@master
+        env:
+          APIKEY: ${{ secrets.NAIS_TEAMSYKMELDING_DEPLOY_KEY }}
+          CLUSTER: dev-gcp
+          RESOURCE: sykmeldingalerts-gcp-dev.yaml
+      - name: Deploy to prod
+        uses: nais/deploy/actions/deploy@master
+        env:
+          APIKEY: ${{ secrets.NAIS_TEAMSYKMELDING_DEPLOY_KEY }}
+          CLUSTER: prod-gcp
+          RESOURCE: sykmeldingalerts-gcp-prod.yaml

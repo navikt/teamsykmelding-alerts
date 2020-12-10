@@ -3,6 +3,10 @@ on:
   push:
     branches:
       - master
+    paths:
+      - .github/workflows/deploy.yaml
+      - sykmeldingalerts-prod.yaml
+      - sykmeldingalerts-dev.yaml
 jobs:
   deploy_prod:
     name: Deploy alert til prod
