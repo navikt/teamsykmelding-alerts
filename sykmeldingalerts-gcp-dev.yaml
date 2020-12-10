@@ -11,14 +11,14 @@ spec:
       channel: '#sykmelding-alerts-dev'
   alerts:
     - alert: syfosm-asynkron-app-nede
-      expr: kube_deployment_status_replicas_available{deployment=~"syfosmaltinn"} == 0
+      expr: kube_deployment_status_replicas_available{deployment=~"syfosmaltinn|sykmeldinger-backend-proxy"} == 0
       for: 5m
       description: "{{ $labels.deployment }} er nede"
       action: "Se `kubectl kubectl get pod  | grep {{ $labels.deployment }}` for å se podder, og `kubectl logs $podnavn` for logger"
       sla: respond within 1h, during office hours
       severity: danger
     - alert: syfosm-kontinuerlig-restart
-      expr: sum(increase(kube_pod_container_status_restarts_total{container=~"syfosmaltinn"}[30m])) by (container) > 2
+      expr: sum(increase(kube_pod_container_status_restarts_total{container=~"syfosmaltinn|sykmeldinger-backend-proxy"}[30m])) by (container) > 2
       for: 5m
       description: "{{ $labels.container }} har restartet flere ganger siste halvtimen!"
       action: "Se `kubectl describe pod {{ $labels.container }}` for events, og `kubectl logs {{ $labels.container }}` for logger"
@@ -32,9 +32,9 @@ spec:
       sla: respond within 1h, during office hours
       severity: danger
     - alert: syfosm-error-logging
-      expr: sum(rate(logd_messages_total{log_app=~"syfosmaltinn",log_level="Error",job="kubernetes-pods"}[5m])) by (log_app) > 0
+      expr: sum(rate(logd_messages_total{log_app=~"syfosmaltinn|sykmeldinger-backend-proxy",log_level="Error",job="kubernetes-pods"}[5m])) by (log_app) > 0
       for: 5m
       description: "{{ $labels.log_app }} rapporterer error i loggene"
-      action: "Sjekk hvorfor {{ $labels.log_app }} har i løpet av dei siste 5 minuttene logget Error"
+      action: "Sjekk hvorfor {{ $labels.log_app }} har logget Error i løpet av de siste 5 minuttene"
       sla: respond within 1h, during office hours
       severity: danger
