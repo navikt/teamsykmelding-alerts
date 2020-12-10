@@ -11,8 +11,15 @@ spec:
       channel: '#sykmelding-alerts-dev'
   alerts:
     - alert: syfosm-asynkron-app-nede
-      expr: kube_deployment_status_replicas_available{deployment=~"syfosmaltinn|sykmeldinger-backend-proxy"} == 0
+      expr: kube_deployment_status_replicas_available{deployment=~"syfosmaltinn"} == 0
       for: 5m
+      description: "{{ $labels.deployment }} er nede"
+      action: "Se `kubectl kubectl get pod  | grep {{ $labels.deployment }}` for å se podder, og `kubectl logs $podnavn` for logger"
+      sla: respond within 1h, during office hours
+      severity: danger
+    - alert: syfosm-synkron-app-nede
+      expr: kube_deployment_status_replicas_available{deployment=~"sykmeldinger-backend-proxy"} == 0
+      for: 2m
       description: "{{ $labels.deployment }} er nede"
       action: "Se `kubectl kubectl get pod  | grep {{ $labels.deployment }}` for å se podder, og `kubectl logs $podnavn` for logger"
       sla: respond within 1h, during office hours
