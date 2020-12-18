@@ -90,3 +90,10 @@ spec:
       action: "sjekk om syfosmaltinn kjører"
       sla: respond within 1h, during office hours
       severity: danger
+    - alert: syfosmsak-kafka-offset
+      expr: kafka_consumergroup_group_sum_lag{group=~"syfosmsak|syfosmsak-consumer"} > 100
+      for: 1m
+      description: "Syfosmsak kafka-lag er høyt"
+      action: "Sjekk om Syfosmsak leser fra kafka"
+      sla: respond within 1h, during office hours
+      severity: danger
