@@ -78,3 +78,10 @@ spec:
       action: "Sjekk logger, og om det kan ha blitt innført feil"
       sla: respond within 1h, during office hours
       severity: danger
+    - alert: syfosmaltinn-kafka-offset
+      expr: kafka_consumergroup_group_sum_lag{group=~"syfosmaltinn-consumer"} > 1000
+      for: 1m
+      description: "Syfosmaltinn har sluttet å lese fra kafka"
+      action: "sjekk om syfosmaltinn kjører"
+      sla: respond within 1h, during office hours
+      severity: danger
