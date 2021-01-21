@@ -79,7 +79,7 @@ spec:
       sla: respond within 1h, during office hours
       severity: danger
     - alert: syfosmaltinn-kafka-offset
-      expr: kafka_consumergroup_group_sum_lag{group=~"syfosmaltinn-consumer"} > 1000
+      expr: kafka_consumergroup_group_sum_lag{group=~"syfosmaltinn-consumer"} > 200
       for: 1m
       description: "Syfosmaltinn kafka-lag er for høyt"
       action: "sjekk om syfosmaltinn kjører"
