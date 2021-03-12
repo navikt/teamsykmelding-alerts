@@ -25,7 +25,14 @@ spec:
       sla: respond within 1h, during office hours
       severity: danger
     - alert: syfosm-kontinuerlig-restart
-      expr: sum(increase(kube_pod_container_status_restarts_total{container=~"syfosmaltinn|sykmeldinger-backend-proxy|syfonlaltinn"}[30m])) by (container) > 2
+      expr: sum(increase(kube_pod_container_status_restarts_total{container=~"sykmeldinger-backend-proxy"}[30m])) by (container) > 2
+      for: 5m
+      description: "{{ $labels.container }} har restartet flere ganger siste halvtimen!"
+      action: "Se `kubectl describe pod {{ $labels.container }}` for events, og `kubectl logs {{ $labels.container }}` for logger"
+      sla: respond within 1h, during office hours
+      severity: danger
+    - alert: syfo-altinn-restart
+      expr: sum(increase(kube_pod_container_status_restarts_total{container=~"syfosmaltinn|syfonlaltinn"}[30m])) by (container) > 4
       for: 5m
       description: "{{ $labels.container }} har restartet flere ganger siste halvtimen!"
       action: "Se `kubectl describe pod {{ $labels.container }}` for events, og `kubectl logs {{ $labels.container }}` for logger"
