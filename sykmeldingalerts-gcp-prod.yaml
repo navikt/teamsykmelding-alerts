@@ -52,3 +52,10 @@ spec:
       action: "Sjekk hvorfor {{ $labels.log_app }} har logget Error i løpet av de siste 5 minuttene"
       sla: respond within 1h, during office hours
       severity: danger
+    - alert: teamsykmeldig-app-cpu
+      expr: (sum(kube_pod_container_resource_requests{namespace="teamsykmelding",resource="cpu", container!="linkerd-proxy",container!="cloudsql-proxy"}) by (container) - sum(rate(container_cpu_usage_seconds_total{namespace="teamsykmelding",container!="linkerd-proxy",container!="cloudsql-proxy",container!="POD", container!=""}[5m])) by (container))  < 0
+      for: 5m
+      description: "{{ $labels.container }} bruker mer CPU enn angitt"
+      action: "Sjekk CPU for {{ $labels.container }}, kanskje juster opp requested eller justere opp antall pods"
+      sla: respond within 1h, during office hours
+      severity: danger
