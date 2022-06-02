@@ -17,12 +17,12 @@ jobs:
       - name: Deploy to dev
         uses: nais/deploy/actions/deploy@master
         env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          APIKEY: ${{ secrets.NAIS_TEAMSYKMELDING_DEPLOY_KEY }}
           CLUSTER: dev-fss
           RESOURCE: sykmeldingalerts-dev.yaml
       - name: Deploy to prod
         uses: nais/deploy/actions/deploy@master
         env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          APIKEY: ${{ secrets.NAIS_TEAMSYKMELDING_DEPLOY_KEY }}
           CLUSTER: prod-fss
           RESOURCE: sykmeldingalerts-prod.yaml
