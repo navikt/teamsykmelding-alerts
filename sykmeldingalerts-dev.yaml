@@ -52,7 +52,7 @@ spec:
       action: "Sjekk hvorfor {{ $labels.log_app }} har i løpet av dei siste 5 minuttene logget Error"
       sla: respond within 1h, during office hours
       severity: danger
-    - alert: syfosmregler-avisst-sykmeldinger
+    - alert: syfosmregler-avvist-sykmeldinger
       expr: sum(increase(syfosmregler_rule_hit_status_counter{app=~"syfosmregler",rule_status="INVALID"}[30m])) by (rule_status) > 120
       for: 10m
       description: "Syfosmregler har mottatt unormalt mange avisste sykmeldinger"
