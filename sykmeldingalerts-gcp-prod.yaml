@@ -46,7 +46,7 @@ spec:
       sla: respond within 1h, during office hours
       severity: danger
     - alert: syfosm-error-logging
-      expr: sum(rate(logd_messages_total{log_app=~"syfosmaltinn|syfonlaltinn|narmesteleder|sykmelding-gateway|narmesteleder-varsel",log_level="Error",job="kubernetes-pods"}[5m])) by (log_app) > 0
+      expr: sum(rate(logd_messages_total{log_team="teamsykmelding", log_level=~"Fatal|Error|", log_app!~'wonderwall|linkerd-init|cloudsql-proxy|vks-init|.*redis'}[5m])) by(log_app) > 0
       for: 5m
       description: "{{ $labels.log_app }} rapporterer error i loggene"
       action: "Sjekk hvorfor {{ $labels.log_app }} har logget Error i løpet av de siste 5 minuttene"
