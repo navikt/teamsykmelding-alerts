@@ -8,7 +8,7 @@ metadata:
 spec:
   receivers:
     slack:
-      channel: '#sykmelding-alerts'
+      channel: '#sykmelding-alerts-dev'
   alerts:
     - alert: teamsykmelding-app-nede
       expr: kube_deployment_status_replicas_available{namespace="teamsykmelding"} == 0
