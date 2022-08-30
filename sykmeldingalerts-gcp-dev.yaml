@@ -8,37 +8,30 @@ metadata:
 spec:
   receivers:
     slack:
-      channel: '#sykmelding-alerts-dev'
+      channel: '#sykmelding-alerts'
   alerts:
-    - alert: syfosm-asynkron-app-nede
-      expr: kube_deployment_status_replicas_available{deployment=~"syfosmaltinn|syfonlaltinn"} == 0
-      for: 5m
-      description: "{{ $labels.deployment }} er nede"
-      action: "Se `kubectl kubectl get pod  | grep {{ $labels.deployment }}` for å se podder, og `kubectl logs $podnavn` for logger"
-      sla: respond within 1h, during office hours
-      severity: danger
-    - alert: syfosm-synkron-app-nede
-      expr: kube_deployment_status_replicas_available{deployment=~"narmesteleder|sykmelding-gateway"} == 0
+    - alert: teamsykmelding-app-nede
+      expr: kube_deployment_status_replicas_available{namespace="teamsykmelding"} == 0
       for: 2m
       description: "{{ $labels.deployment }} er nede"
       action: "Se `kubectl kubectl get pod  | grep {{ $labels.deployment }}` for å se podder, og `kubectl logs $podnavn` for logger"
       sla: respond within 1h, during office hours
       severity: danger
-    - alert: syfosm-kontinuerlig-restart
-      expr: sum(increase(kube_pod_container_status_restarts_total{container=~"syfosmaltinn|syfonlaltinn|narmesteleder|sykmelding-gateway"}[30m])) by (container) > 2
+    - alert: teamsykmelding-kontinuerlig-restart
+      expr: sum(increase(kube_pod_container_status_restarts_total{namespace="teamsykmelding"}[30m])) by (container) > 3
       for: 5m
       description: "{{ $labels.container }} har restartet flere ganger siste halvtimen!"
       action: "Se `kubectl describe pod {{ $labels.container }}` for events, og `kubectl logs {{ $labels.container }}` for logger"
       sla: respond within 1h, during office hours
       severity: danger
-    - alert: syfosm-mangler-metrikker
-      expr: absent(up{app=~"syfosmaltinn|syfonlaltinn|narmesteleder",job="kubernetes-pods"})
+    - alert: teamsykmelding-mangler-metrikker
+      expr: absent(up{kubernetes_namespace="teamsykmelding",job="kubernetes-pods"})
       for: 5m
       description: "{{ $labels.app }} rapporterer ingen metrikker i {{ $labels.kubernetes_namespace }}"
       action: "Sjekk om {{ $labels.app }} i {{ $labels.kubernetes_namespace }} er oppe"
       sla: respond within 1h, during office hours
       severity: danger
-    - alert: syfosm-error-logging
+    - alert: teamsykmelding-error-logging
       expr: sum(rate(logd_messages_total{log_team="teamsykmelding", log_level=~"Fatal|Error", log_app!~'wonderwall|linkerd-init|cloudsql-proxy|vks-init|.*redis'}[5m])) by(log_app) > 0
       for: 5m
       description: "{{ $labels.log_app }} rapporterer error i loggene"
@@ -46,16 +39,51 @@ spec:
       sla: respond within 1h, during office hours
       severity: danger
     - alert: teamsykmeldig-app-cpu
-      expr: (sum(kube_pod_container_resource_requests{namespace="teamsykmelding",resource="cpu", container!="linkerd-proxy",container!="cloudsql-proxy"}) by (container) - sum(rate(container_cpu_usage_seconds_total{namespace="teamsykmelding",container!="linkerd-proxy",container!="cloudsql-proxy",container!="POD", container!=""}[5m])) by (container))  < 0
+      expr: (sum(kube_pod_container_resource_requests{namespace="teamsykmelding",resource="cpu", container!="linkerd-proxy",container!="cloudsql-proxy",container!="secure-logs-configmap-reload",container!="secure-logs-fluentd"}) by (container) - sum(rate(container_cpu_usage_seconds_total{namespace="teamsykmelding",container!="linkerd-proxy",container!="cloudsql-proxy",container!="secure-logs-configmap-reload",container!="secure-logs-fluentd",container!="POD", container!=""}[5m])) by (container)) < 0
       for: 5m
       description: "{{ $labels.container }} bruker mer CPU enn angitt"
       action: "Sjekk CPU for {{ $labels.container }}, kanskje juster opp requested eller justere opp antall pods"
       sla: respond within 1h, during office hours
       severity: danger
-    - alert: teamsykmeldig-app-ram  
-      expr: sum(kube_pod_container_resource_requests{namespace="teamsykmelding", resource="memory", container!="linkerd-proxy",container!="cloudsql-proxy"}) by (container) - sum(container_memory_working_set_bytes{namespace="teamsykmelding",container!="linkerd-init",container!="linkerd-proxy",container!="cloudsql-proxy",container!="POD", container!=""}) by (container) < 0
+    - alert: teamsykmeldig-app-ram
+      expr: sum(kube_pod_container_resource_requests{namespace="teamsykmelding", resource="memory", container!="linkerd-proxy",container!="cloudsql-proxy",container!="secure-logs-configmap-reload",container!="secure-logs-fluentd"}) by (container) - sum(container_memory_working_set_bytes{namespace="teamsykmelding",container!="linkerd-init",container!="linkerd-proxy",container!="cloudsql-proxy",container!="secure-logs-configmap-reload",container!="secure-logs-fluentd",container!="POD", container!=""}) by (container) < 0
       for: 5m
       description: "{{ $labels.container }} bruker mer RAM enn angitt"
       action: "Sjekk RAM for {{ $labels.container }}, kanskje juster opp requested eller justere opp antall pods"
-      sla: respond within 1h, during office hours 
+      sla: respond within 1h, during office hours
+      severity: danger
+    - alert: syfosmmottak-ugyldige-sykmeldinger
+      expr: sum(increase(syfosmmottak_invalid_message_no_notice_count_total[10m])) > 50
+      for: 10m
+      description: "Syfosmmottak har mottatt unormalt mange ugyldige sykmeldinger"
+      action: "Sjekk logger, og om det kan ha blitt innført feil"
+      sla: respond within 1h, during office hours
+      severity: danger
+    - alert: syfosmregler-avviste-sykmeldinger
+      expr: sum(increase(syfosmregler_rule_hit_status_counter_total{app=~"syfosmregler",rule_status="INVALID"}[30m])) by (rule_status) > 120
+      for: 10m
+      description: "Syfosmregler har avvist unormalt mange sykmeldinger"
+      action: "Sjekk logger, og om det kan ha blitt innført feil"
+      sla: respond within 1h, during office hours
+      severity: danger
+    - alert: syfosminfotrygd-mange-manuelle-oppg
+      expr: (100 * sum(rate(syfosminfotrygd_rule_hit_status_counter_total{rule_status="MANUAL_PROCESSING"}[10m])) / sum(rate(syfosminfotrygd_rule_hit_status_counter[10m]))) > 90
+      for: 10m
+      description: "Syfosminfotrygd oppretter unormalt mange oppgaver"
+      action: "Sjekk logger, kanskje Infotrygd har problemer"
+      sla: respond within 1h, during office hours
+      severity: danger
+    - alert: pale-2-ugyldige-legeerklaeringer
+      expr: sum(increase(pale2_invalid_message_no_notice_count_total[10m])) > 20
+      for: 10m
+      description: "Pale-2 har mottatt unormalt mange ugyldige legeerklæringer"
+      action: "Sjekk logger, og om det kan ha blitt innført feil"
+      sla: respond within 1h, during office hours
+      severity: danger
+    - alert: teamsykmelding-kafka-offset
+      expr: kafka_consumergroup_group_topic_sum_lag{topic=~"teamsykmelding.*"} > 500
+      for: 1m
+      description: "{{ $labels.group }} kafka-lag for topic {{ $labels.topic }} er høyt"
+      action: "Sjekk om {{ $labels.group }} leser fra kafka"
+      sla: respond within 1h, during office hours
       severity: danger
