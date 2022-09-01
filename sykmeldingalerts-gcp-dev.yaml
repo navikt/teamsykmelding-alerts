@@ -82,7 +82,7 @@ spec:
       severity: danger
     - alert: teamsykmelding-kafka-offset
       expr: kafka_consumergroup_group_topic_sum_lag{topic=~"teamsykmelding.*"} > 500
-      for: 1m
+      for: 10m
       description: "{{ $labels.group }} kafka-lag for topic {{ $labels.topic }} er høyt"
       action: "Sjekk om {{ $labels.group }} leser fra kafka"
       sla: respond within 1h, during office hours
