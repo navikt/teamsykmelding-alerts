@@ -81,7 +81,7 @@ spec:
       sla: respond within 1h, during office hours
       severity: danger
     - alert: teamsykmelding-kafka-offset
-      expr: kafka_consumergroup_group_topic_sum_lag{topic=~"teamsykmelding.*", group!~"dvh-sykm|isdialogmelding|isnarmesteleder-v2|min-side-.*|syfosoknad-.*|syfosyketilfelle-.*|notifikasjon-.*"} > 500
+      expr: kafka_consumergroup_group_topic_sum_lag{topic=~"teamsykmelding.*", group!~"dvh-sykm|isdialogmelding|isnarmesteleder-v2|min-side-.*|syfosoknad-.*|syfosyketilfelle-.*|notifikasjon-.*|sykmeldinger-backend-kafka-.*"} > 500
       for: 10m
       description: "{{ $labels.group }} kafka-lag for topic {{ $labels.topic }} er høyt"
       action: "Sjekk om {{ $labels.group }} leser fra kafka"
