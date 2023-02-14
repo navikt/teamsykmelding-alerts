@@ -3,6 +3,8 @@ kind: PrometheusRule
 metadata:
   name: sykmeldingalerts
   namespace: teamsykmelding
+  labels:
+    team: teamsykmelding
 spec:
   groups:
     - name: teamsykmelding dev-gcp alarmer
