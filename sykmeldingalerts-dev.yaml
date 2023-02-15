@@ -30,7 +30,7 @@ spec:
           namespace: teamsykmelding
           severity: danger
       - alert: syfosm-mangler-metrikker
-        expr: absent(up{app=~"smgcp-proxy|syfohelsenettproxy",job="kubernetes-pods"})
+        expr: absent(up{app=~"smgcp-proxy|syfohelsenettproxy",job="kubernetes-pods"}) == 0
         for: 5m
         annotations:
           consequence: Application is unavailable
