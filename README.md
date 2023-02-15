@@ -4,16 +4,30 @@
 
 Lager alerts for team sykmelding sine apper
 
-For mer informasjon om hvordan alarmene fungere se:
-`https://github.com/nais/doc/tree/master/content/alerts`
+For mer informasjon om hvordan alarmene fungerer se:
+`https://doc.nais.io/observability/alerts/`
 
-## Utvikling:
-En kan bruke `https://prometheus.nais.preprod.local/graph` som hjelp til å teste queries.
+## Utvikling
+### GCP
+En kan bruke `https://prometheus.dev-gcp.nav.cloud.nais.io/` som hjelp til å teste queries.
+### FSS
+En kan bruke `https://prometheus.dev-fss.nav.cloud.nais.io/` som hjelp til å teste queries.
 
-### Deploy prod:
-Alle kode som er i master går til prod-fss
+### Deploy prod
+Alle kode som er i master går til prod-gcp og prod-fss
+### GCP
+Dette kan evt gjøres manuelt med følgende kommando:
+`kubectl apply --context prod-gcp --namespace default -f sykmeldingalerts.yaml`
+### FSS
 Dette kan evt gjøres manuelt med følgende kommando:
 `kubectl apply --context prod-fss --namespace default -f sykmeldingalerts.yaml`
 
-### For NAV ansatte
-Vi er tilgjenngelig på slack kanalen #team-sykmelding
+## Henvendelser
+Dette prosjeket er vedlikeholdt av [navikt/teamsykmelding](CODEOWNERS)
+
+Spørsmål knyttet til koden eller prosjektet kan stilles som
+[issues](https://github.com/navikt/sykmelding-alerts/issues) her på GitHub
+
+### For NAV-ansatte
+
+Interne henvendelser kan sendes via Slack i kanalen [#team-sykmelding](https://nav-it.slack.com/archives/CMA3XV997)
