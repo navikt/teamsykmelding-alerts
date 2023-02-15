@@ -30,12 +30,12 @@ spec:
             namespace: teamsykmelding
             severity: danger
         - alert: teamsykmelding-mangler-metrikker
-          expr: absent(up{kubernetes_namespace="teamsykmelding",job="kubernetes-pods"})
+          expr: absent(up{namespace="teamsykmelding",job="kubernetes-pods"})
           for: 5m
           annotations:
             consequence: Application is unavailable
-            action: "Sjekk om {{ $labels.app }} i {{ $labels.kubernetes_namespace }} er oppe"
-            summary: "{{ $labels.app }} rapporterer ingen metrikker i {{ $labels.kubernetes_namespace }}"
+            action: "Sjekk om {{ $labels.app }} i {{ $labels.namespace }} er oppe"
+            summary: "{{ $labels.app }} rapporterer ingen metrikker i {{ $labels.namespace }}"
           labels:
             namespace: teamsykmelding
             severity: danger

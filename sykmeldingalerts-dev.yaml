@@ -34,8 +34,8 @@ spec:
         for: 5m
         annotations:
           consequence: Application is unavailable
-          action: "Sjekk om {{ $labels.app }} i {{ $labels.kubernetes_namespace }} er oppe"
-          summary: "{{ $labels.app }} rapporterer ingen metrikker i {{ $labels.kubernetes_namespace }}"
+          action: "Sjekk om {{ $labels.app }} i {{ $labels.namespace }} er oppe"
+          summary: "{{ $labels.app }} rapporterer ingen metrikker i {{ $labels.namespace }}"
         labels:
           namespace: teamsykmelding
           severity: danger
