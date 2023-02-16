@@ -149,3 +149,33 @@ spec:
           labels:
             namespace: teamsykmelding
             severity: danger
+        - alert: dinesykmeldte-kafka app er nede
+          expr: up{app="dinesykmeldte-kafka", job="kubernetes-pods"} == 0
+          for: 5m
+          annotations:
+            consequence: Application is unavailable
+            action: "`kubectl describe pod {{ $labels.pod }} -n {{ $labels.namespace }}` for events, og `kubectl logs {{ $labels.pod_ }} -n {{ $labels.namespace }}` for logger"
+            summary: "App {{ $labels.app }} er nede i namespace {{ $labels.kubernetes_namespace }}"
+          labels:
+            namespace: teamsykmelding
+            severity: danger
+        - alert: dinesykmeldte-kafka-offset
+          expr: kafka_consumergroup_group_sum_lag{group=~"dinesykmeldte-backend"} > 100
+          for: 1m
+          annotations:
+            consequence: Application is unavailable
+            action: "Sjekk om dinesykmeldte-kafka leser fra kafka"
+            summary: "dinesykmeldte-kafka kafka-lag er høyt"
+          labels:
+            namespace: teamsykmelding
+            severity: danger
+        - alert: dinesykmeldte-kafka-error-logging
+          expr: sum(rate(logd_messages_total{log_app="dinesykmeldte-kafka",log_level="Error",job="kubernetes-pods"}[5m])) by (log_app) > 0
+          for: 1m
+          annotations:
+            consequence: Application is unavailable
+            action: "Sjekk hvorfor {{ $labels.log_app }} har logget error i løpet av de siste 5 minuttene"
+            summary: "{{ $labels.log_app }} rapporterer error i loggene"
+          labels:
+            namespace: teamsykmelding
+            severity: danger
