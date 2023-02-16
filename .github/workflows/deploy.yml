@@ -5,8 +5,8 @@ on:
       - master
     paths:
       - .github/workflows/deploy.yaml
-      - sykmeldingalerts-prod.yaml
-      - sykmeldingalerts-dev.yaml
+      - sykmeldingalerts-fss-prod.yaml
+      - sykmeldingalerts-fss-dev.yaml
 jobs:
   deploy_prod:
     name: Deploy alert til prod

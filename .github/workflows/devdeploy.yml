@@ -6,7 +6,7 @@ on:
       - '!master'
     paths:
       - .github/workflows/devdeploy.yaml
-      - sykmeldingalerts-dev.yaml
+      - sykmeldingalerts-fss-dev.yaml
 jobs:
   deploy_dev:
     name: Deploy alert til dev
