@@ -129,3 +129,23 @@ spec:
           labels:
             namespace: teamsykmelding
             severity: danger
+        - alert: dinesykmeldte-backend app er nede
+          expr: up{app="dinesykmeldte-backend", job="kubernetes-pods"} == 0
+          for: 5m
+          annotations:
+            consequence: Application is unavailable
+            action: "`kubectl describe pod {{ $labels.pod }} -n {{ $labels.namespace }}` for events, og `kubectl logs {{ $labels.pod }} -n {{ $labels.namespace }}` for logger"
+            summary: "App {{ $labels.app }} er nede i namespace {{ $labels.namespace }}"
+          labels:
+            namespace: teamsykmelding
+            severity: danger
+        - alert: dinesykmeldte-backend-error-logging
+          expr: sum(rate(logd_messages_total{log_app="dinesykmeldte-backend",log_level="Error",job="kubernetes-pods"}[5m])) by (log_app) > 0
+          for: 5m
+          annotations:
+            consequence: Application is unavailable
+            action: "Sjekk hvorfor {{ $labels.log_app }} har logget error i løpet av de siste 5 minuttene"
+            summary: "{{ $labels.log_app }} rapporterer error i loggene"
+          labels:
+            namespace: teamsykmelding
+            severity: danger
