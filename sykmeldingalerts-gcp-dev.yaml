@@ -179,3 +179,23 @@ spec:
           labels:
             namespace: teamsykmelding
             severity: danger
+        - alert: syfosmoppgave-stream er nede
+          expr: up{app="syfosmoppgave-stream", job="kubernetes-pods"} == 0
+          for: 5m
+          annotations:
+            consequence: Application is unavailable
+            action: "`kubectl describe pod {{ $labels.kubernetes_pod_name }} -n {{ $labels.kubernetes_namespace }}` for events, og `kubectl logs {{ $labels.kubernetes_pod_name }} -n {{ $labels.kubernetes_namespace }}` for logger"
+            summary: "App {{ $labels.app }} er nede i namespace {{ $labels.kubernetes_namespace }}"
+          labels:
+            namespace: teamsykmelding
+            severity: danger
+        - alert: syfosmoppgave-stream-kafka-offset
+          expr: kafka_consumergroup_group_sum_lag{group=~"teamsykmelding.syfosmoppgave-stream_stream_"} > 100
+          for: 1m
+          annotations:
+            consequence: Application is unavailable
+            action: "Sjekk om syfosmoppgave-stream leser fra kafka"
+            summary: "syfosmoppgave-stream kafka-lag er høyt"
+          labels:
+            namespace: teamsykmelding
+            severity: danger
