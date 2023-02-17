@@ -149,3 +149,23 @@ spec:
           labels:
             namespace: teamsykmelding
             severity: danger
+        - alert: syfosmarena-stream-kafka-offset
+          expr: kafka_consumergroup_group_sum_lag{group=~"teamsykmelding.syfosmarena-stream_stream_"} > 100
+          for: 1m
+          annotations:
+            consequence: Application is unavailable
+            action: "Sjekk om syfosmarena-stream leser fra kafka"
+            summary: "syfosmarena-stream kafka-lag er høyt"
+          labels:
+            namespace: teamsykmelding
+            severity: danger
+        - alert: sykmeldinger-arbeidsgiver-kafka-offset
+          expr: kafka_consumergroup_group_sum_lag{group=~"sykmeldinger-arbeidsgiver-consumer-v2"} > 100
+          for: 1m
+          annotations:
+            consequence: Application is unavailable
+            action: "Sjekk om sykmeldinger-arbeidsgiver leser fra kafka"
+            summary: "sykmeldinger-arbeidsgiver kafka-lag er høyt"
+          labels:
+            namespace: teamsykmelding
+            severity: danger
