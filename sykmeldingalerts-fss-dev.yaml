@@ -43,7 +43,7 @@ spec:
         expr: sum(rate(logd_messages_total{log_team="teamsykmelding", log_level=~"Fatal|Error", log_app!~'wonderwall|linkerd-init|cloudsql-proxy|vks-init|.*redis'}[5m])) by(log_app) > 0
         for: 5m
         annotations:
-          consequence: Application is unavailable
+          consequence: Application maye have a error
           action: "Sjekk hvorfor {{ $labels.log_app }} har i løpet av dei siste 5 minuttene logget Error"
           summary: "{{ $labels.log_app }} rapporterer error i loggene"
         labels:

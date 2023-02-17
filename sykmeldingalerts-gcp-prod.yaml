@@ -31,9 +31,9 @@ spec:
             severity: warning
         - alert: teamsykmelding-error-logging
           expr: sum(rate(logd_messages_total{log_team="teamsykmelding", log_level=~"Fatal|Error", log_app!~'wonderwall|linkerd-init|cloudsql-proxy|vks-init|.*redis'}[5m])) by(log_app) > 0
-          for: 2m
+          for: 5m
           annotations:
-            consequence: Application is unavailable
+            consequence: Application is logging error
             action: "Sjekk hvorfor {{ $labels.log_app }} har logget Error i løpet av de siste 5 minuttene"
             summary: "{{ $labels.log_app }} rapporterer error i loggene"
           labels:
@@ -43,7 +43,7 @@ spec:
           expr: (sum(kube_pod_container_resource_requests{namespace="teamsykmelding",resource="cpu", container!="linkerd-proxy",container!="cloudsql-proxy",container!="secure-logs-configmap-reload",container!="secure-logs-fluentd"}) by (container) - sum(rate(container_cpu_usage_seconds_total{namespace="teamsykmelding",container!="linkerd-proxy",container!="cloudsql-proxy",container!="secure-logs-configmap-reload",container!="secure-logs-fluentd",container!="POD", container!=""}[5m])) by (container)) < 0
           for: 5m
           annotations:
-            consequence: Application is unavailable
+            consequence: Application may use up CPU
             action: "Sjekk CPU for {{ $labels.container }}, kanskje juster opp requested eller justere opp antall pods"
             summary: "{{ $labels.container }} bruker mer CPU enn angitt"
           labels:
@@ -53,7 +53,7 @@ spec:
           expr: sum(kube_pod_container_resource_requests{namespace="teamsykmelding", resource="memory", container!="linkerd-proxy",container!="cloudsql-proxy",container!="secure-logs-configmap-reload",container!="secure-logs-fluentd"}) by (container) - sum(container_memory_working_set_bytes{namespace="teamsykmelding",container!="linkerd-init",container!="linkerd-proxy",container!="cloudsql-proxy",container!="secure-logs-configmap-reload",container!="secure-logs-fluentd",container!="POD", container!=""}) by (container) < 0
           for: 5m
           annotations:
-            consequence: Application is unavailable
+            consequence: Application may use up RAM
             action: "Sjekk RAM for {{ $labels.container }}, kanskje juster opp requested eller justere opp antall pods"
             summary: "{{ $labels.container }} bruker mer RAM enn angitt"
           labels:
@@ -63,7 +63,7 @@ spec:
           expr: sum(increase(syfosmmottak_invalid_message_no_notice_count_total[10m])) > 50
           for: 10m
           annotations:
-            consequence: Application is unavailable
+            consequence: Application is produces a lot og invalid messages
             action: "Sjekk logger, og om det kan ha blitt innført feil"
             summary: "syfosmmottak har mottatt unormalt mange ugyldige sykmeldinger"
           labels:
