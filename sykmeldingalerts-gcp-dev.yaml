@@ -11,7 +11,7 @@ spec:
       rules:
         - alert: teamsykmelding-app-nede
           expr: kube_deployment_status_replicas_available{namespace="teamsykmelding"} == 0
-          for: 2m
+          for: 5m
           annotations:
             consequence: Application is unavailable
             action: "Se `kubectl get pod  | grep {{ $labels.deployment }}` for å se podder, og `kubectl logs $podnavn` for logger"
