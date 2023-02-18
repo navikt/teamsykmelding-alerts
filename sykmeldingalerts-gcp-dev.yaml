@@ -11,7 +11,7 @@ spec:
       rules:
         - alert: teamsykmelding-app-nede
           expr: kube_deployment_status_replicas_available{namespace="teamsykmelding"} == 0
-          for: 5m
+          for: 10m
           annotations:
             consequence: Application is unavailable
             action: "Se `kubectl get pod  | grep {{ $labels.deployment }}` for å se podder, og `kubectl logs $podnavn` for logger"
@@ -31,17 +31,17 @@ spec:
             severity: danger
         - alert: teamsykmelding-error-logging
           expr: sum(rate(logd_messages_total{log_team="teamsykmelding", log_level=~"Fatal|Error", log_app!~'wonderwall|linkerd-init|cloudsql-proxy|vks-init|.*redis'}[5m])) by(log_app) > 0
-          for: 5m
+          for: 10m
           annotations:
             consequence: Application is logging error
-            action: "Sjekk hvorfor {{ $labels.log_app }} har logget Error i løpet av de siste 5 minuttene"
+            action: "Sjekk hvorfor {{ $labels.log_app }} har logget Error i løpet av de siste 10 minuttene"
             summary: "{{ $labels.log_app }} rapporterer error i loggene"
           labels:
             namespace: teamsykmelding
             severity: danger
         - alert: teamsykmeldig-app-cpu
           expr: (sum(kube_pod_container_resource_requests{namespace="teamsykmelding",resource="cpu", container!="linkerd-proxy",container!="cloudsql-proxy",container!="secure-logs-configmap-reload",container!="secure-logs-fluentd"}) by (container) - sum(rate(container_cpu_usage_seconds_total{namespace="teamsykmelding",container!="linkerd-proxy",container!="cloudsql-proxy",container!="secure-logs-configmap-reload",container!="secure-logs-fluentd",container!="POD", container!=""}[5m])) by (container)) < 0
-          for: 5m
+          for: 10m
           annotations:
             consequence: Application may use up CPU
             action: "Sjekk CPU for {{ $labels.container }}, kanskje juster opp requested eller justere opp antall pods"
@@ -51,7 +51,7 @@ spec:
             severity: danger
         - alert: teamsykmeldig-app-ram
           expr: sum(kube_pod_container_resource_requests{namespace="teamsykmelding", resource="memory", container!="linkerd-proxy",container!="cloudsql-proxy",container!="secure-logs-configmap-reload",container!="secure-logs-fluentd"}) by (container) - sum(container_memory_working_set_bytes{namespace="teamsykmelding",container!="linkerd-init",container!="linkerd-proxy",container!="cloudsql-proxy",container!="secure-logs-configmap-reload",container!="secure-logs-fluentd",container!="POD", container!=""}) by (container) < 0
-          for: 5m
+          for: 10m
           annotations:
             consequence: Application may use up RAM
             action: "Sjekk RAM for {{ $labels.container }}, kanskje juster opp requested eller justere opp antall pods"
@@ -111,7 +111,7 @@ spec:
             severity: danger
         - alert: syfosmsak-stream-kafka-offset
           expr: up{app="syfosmsak-stream", job="kubernetes-pods"} == 0
-          for: 1m
+          for: 5m
           annotations:
             consequence: Application is unavailable
             action: "Sjekk om syfosmsak-stream leser fra kafka"
@@ -121,7 +121,7 @@ spec:
             severity: danger
         - alert: dinesykmeldte-kafka-offset
           expr: kafka_consumergroup_group_sum_lag{group=~"dinesykmeldte-backend"} > 100
-          for: 1m
+          for: 5m
           annotations:
             consequence: Application is unavailable
             action: "Sjekk om dinesykmeldte-kafka leser fra kafka"
@@ -131,7 +131,7 @@ spec:
             severity: danger
         - alert: syfosmoppgave-stream-kafka-offset
           expr: kafka_consumergroup_group_sum_lag{group=~"teamsykmelding.syfosmoppgave-stream_stream_"} > 100
-          for: 1m
+          for: 5m
           annotations:
             consequence: Application is unavailable
             action: "Sjekk om syfosmoppgave-stream leser fra kafka"
@@ -141,7 +141,7 @@ spec:
             severity: danger
         - alert: narmesteleder-arbeidsforhold-kafka-offset
           expr: kafka_consumergroup_group_sum_lag{group=~"narmesteleder-arbeidsforhold"} > 100
-          for: 1m
+          for: 5m
           annotations:
             consequence: Application is unavailable
             action: "Sjekk om narmesteleder-arbeidsforhold leser fra kafka"
@@ -151,7 +151,7 @@ spec:
             severity: danger
         - alert: syfosmarena-stream-kafka-offset
           expr: kafka_consumergroup_group_sum_lag{group=~"teamsykmelding.syfosmarena-stream_stream_"} > 100
-          for: 1m
+          for: 5m
           annotations:
             consequence: Application is unavailable
             action: "Sjekk om syfosmarena-stream leser fra kafka"
