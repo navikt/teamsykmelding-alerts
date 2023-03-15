@@ -14,13 +14,13 @@ spec:
           for: 2m
           annotations:
             consequence: Application is unavailable
-            action: "Se `kubectl get pod  | grep {{ $labels.deployment }}` for å se podder, og `kubectl logs $podnavn` for logger"
+            action: "Se `kubectl get pod | grep {{ $labels.deployment }}` for å se podder, og `kubectl logs $podnavn` for logger"
             summary: "{{ $labels.deployment }} er nede"
           labels:
             namespace: teamsykmelding
             severity: danger
         - alert: teamsykmelding-kontinuerlig-restart
-          expr: sum(increase(kube_pod_container_status_restarts_total{namespace="teamsykmelding"}[30m])) by (container) > 3
+          expr: sum(increase(kube_pod_container_status_restarts_total{namespace="teamsykmelding", container!="secure-logs-fluentd"}[30m])) by (container) > 3
           for: 2m
           annotations:
             consequence: Application is unavailable

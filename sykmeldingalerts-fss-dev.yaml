@@ -14,7 +14,7 @@ spec:
         for: 5m
         annotations:
           consequence: Application is unavailable
-          action: "Se `kubectl get pod  | grep {{ $labels.deployment }}` for å se podder, og `kubectl logs $podnavn` for logger"
+          action: "Se `kubectl get pod | grep {{ $labels.deployment }}` for å se podder, og `kubectl logs $podnavn` for logger"
           summary: "{{ $labels.deployment }} er nede"
         labels:
           namespace: teamsykmelding
