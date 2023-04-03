@@ -100,7 +100,7 @@ spec:
             namespace: teamsykmelding
             severity: danger
         - alert: teamsykmelding-kafka-offset
-          expr: kafka_consumergroup_group_topic_sum_lag{topic=~"teamsykmelding.*", group!~"dvh-sykm|isdialogmelding|isnarmesteleder-v2|min-side-.*|.*soknad.*|syfosyketilfelle-.*|notifikasjon-.*|sykepengesoknad-backend"} > 500
+          expr: kafka_consumergroup_group_topic_sum_lag{topic=~"teamsykmelding.*", group!~"dvh-sykm|isdialogmelding|isnarmesteleder-v2|min-side-.*|.*soknad.*|syfosyketilfelle-.*|notifikasjon-.*|syfosoknad-consumer"} > 500
           for: 10m
           annotations:
             consequence: Application is unavailable
