@@ -26,7 +26,7 @@ Dette kan evt gjøres manuelt med følgende kommando:
 Dette prosjeket er vedlikeholdt av [navikt/teamsykmelding](CODEOWNERS)
 
 Spørsmål knyttet til koden eller prosjektet kan stilles som
-[issues](https://github.com/navikt/sykmelding-alerts/issues) her på GitHub
+[issues](https://github.com/navikt/teamsykmelding-alerts/issues) her på GitHub
 
 ### For NAV-ansatte
 Interne henvendelser kan sendes via Slack i kanalen [#team-sykmelding](https://nav-it.slack.com/archives/CMA3XV997)
