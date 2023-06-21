@@ -44,8 +44,8 @@ spec:
           for: 5m
           annotations:
             consequence: Application may use up CPU
-            action: "Sjekk CPU for {{ $labels.container }}, kanskje juster opp requested eller justere opp antall pods"
-            summary: "{{ $labels.container }} bruker mer CPU enn angitt"
+            action: "Sjekk CPU for {{ $labels.pod }}, kanskje juster opp requested eller justere opp antall pods"
+            summary: "{{ $labels.app }} : {{ $labels.pod }} bruker mer CPU enn angitt"
           labels:
             namespace: teamsykmelding
             severity: danger
@@ -54,8 +54,8 @@ spec:
           for: 5m
           annotations:
             consequence: Application may use up RAM
-            action: "Sjekk RAM for {{ $labels.container }}, kanskje juster opp requested eller justere opp antall pods"
-            summary: "{{ $labels.container }} bruker mer RAM enn angitt"
+            action: "Sjekk RAM for {{ $labels.pod }}, kanskje juster opp requested eller justere opp antall pods"
+            summary: "{{ $labels.app }} : {{ $labels.pod }} bruker mer RAM enn angitt"
           labels:
             namespace: teamsykmelding
             severity: danger
