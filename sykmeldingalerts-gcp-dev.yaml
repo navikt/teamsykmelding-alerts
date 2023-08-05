@@ -20,12 +20,12 @@ spec:
             namespace: teamsykmelding
             severity: danger
         - alert: teamsykmelding-kontinuerlig-restart
-          expr: sum(increase(kube_pod_container_status_restarts_total{namespace="teamsykmelding", container!="secure-logs-fluentd", container!="cloudsql-proxy", container!="linkerd-proxy", container!="elector", container!="secure-logs-configmap-reload"}[30m])) by (container) > 3
+          expr: sum(increase(kube_pod_container_status_restarts_total{namespace="teamsykmelding", container!="secure-logs-fluentd", container!="cloudsql-proxy", container!="linkerd-proxy", container!="elector", container!="secure-logs-configmap-reload"}[60m])) by (container) > 3
           for: 5m
           annotations:
             consequence: Application is unavailable
             action: "Se `kubectl describe pod {{ $labels.container }}` for events, og `kubectl logs {{ $labels.container }}` for logger"
-            summary: "{{ $labels.container }} har restartet flere ganger siste halvtimen!"
+            summary: "{{ $labels.container }} har restartet flere ganger siste timen!"
           labels:
             namespace: teamsykmelding
             severity: danger
