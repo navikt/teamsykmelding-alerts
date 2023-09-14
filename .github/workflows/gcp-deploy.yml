@@ -2,7 +2,7 @@ name: Deploy alerts to gcp
 on:
   push:
     branches:
-      - master
+      - main
     paths:
       - .github/workflows/gcp-deploy.yml
       - sykmeldingalerts-gcp-prod.yaml
