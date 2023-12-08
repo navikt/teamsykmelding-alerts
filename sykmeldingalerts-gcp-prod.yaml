@@ -30,7 +30,7 @@ spec:
             namespace: teamsykmelding
             severity: warning
         - alert: teamsykmelding-error-logging
-          expr: sum(rate(logd_messages_total{log_team="teamsykmelding", log_level=~"Fatal|Error", log_app!~'wonderwall|linkerd-init|cloudsql-proxy|vks-init|.*redis'}[5m])) by(log_app) > 0
+          expr: sum(rate(logd_messages_total{team="teamsykmelding", log_level=~"Fatal|Error", log_app!~'wonderwall|linkerd-init|cloudsql-proxy|vks-init|.*redis'}[5m])) by(log_app) > 0
           for: 5m
           annotations:
             consequence: Application is logging error
