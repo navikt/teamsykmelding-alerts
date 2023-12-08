@@ -34,7 +34,7 @@ spec:
           for: 10m
           annotations:
             consequence: Application is logging error
-            action: "Sjekk hvorfor {{ $labels.log_app }} har logget Error i løpet av de siste 10 minuttene https://logs.adeo.no/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!t,value:0),time:(from:now-10m,to:now))&_a=(columns:!(level,message,envclass,application,pod),filters:!(),interval:auto,query:(language:lucene,query:'%20%2Bapplication:%22{{ $labels.log_app }}%22%20%2Benvclass:%22q%22%20%2Blevel:Error'),sort:!(!('@timestamp',desc)))"
+            action: "Sjekk hvorfor {{ $labels.app }} har logget Error i løpet av de siste 10 minuttene https://logs.adeo.no/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!t,value:0),time:(from:now-10m,to:now))&_a=(columns:!(level,message,envclass,application,pod),filters:!(),interval:auto,query:(language:lucene,query:'%20%2Bapplication:%22{{ $labels.app }}%22%20%2Benvclass:%22q%22%20%2Blevel:Error'),sort:!(!('@timestamp',desc)))"
             summary: "{{ $labels.app }} rapporterer error i loggene"
           labels:
             namespace: teamsykmelding
