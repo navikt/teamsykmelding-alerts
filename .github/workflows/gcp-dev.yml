@@ -3,7 +3,7 @@ on:
   push:
     branches:
       - '*'
-      - '!master'
+      - '!main'
     paths:
       - .github/workflows/gcp-dev.yml
       - sykmeldingalerts-gcp-dev.yaml
