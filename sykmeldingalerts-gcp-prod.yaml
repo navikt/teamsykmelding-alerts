@@ -30,12 +30,12 @@ spec:
             namespace: teamsykmelding
             severity: warning
         - alert: teamsykmelding-error-logging
-          expr: sum(rate(logd_messages_total{team="teamsykmelding", log_level=~"Fatal|Error", log_app!~'wonderwall|linkerd-init|cloudsql-proxy|vks-init|.*redis'}[5m])) by(log_app) > 0
+          expr: sum(rate(logd_messages_total{team="teamsykmelding", log_level=~"Fatal|Error", app!~'wonderwall|linkerd-init|cloudsql-proxy|vks-init|.*redis'}[5m])) by(app) > 0
           for: 5m
           annotations:
             consequence: Application is logging error
-            action: "Sjekk hvorfor {{ $labels.log_app }} har logget Error i løpet av de siste 5 minuttene https://logs.adeo.no/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!t,value:0),time:(from:now-5m,to:now))&_a=(columns:!(level,message,envclass,application,pod),filters:!(),interval:auto,query:(language:lucene,query:'%20%2Bapplication:%22{{ $labels.log_app }}%22%20%2Benvclass:%22p%22%20%2Blevel:Error'),sort:!(!('@timestamp',desc)))"
-            summary: "{{ $labels.log_app }} rapporterer error i loggene"
+            action: "Sjekk hvorfor {{ $labels.app }} har logget Error i løpet av de siste 5 minuttene https://logs.adeo.no/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!t,value:0),time:(from:now-5m,to:now))&_a=(columns:!(level,message,envclass,application,pod),filters:!(),interval:auto,query:(language:lucene,query:'%20%2Bapplication:%22{{ $labels.log_app }}%22%20%2Benvclass:%22p%22%20%2Blevel:Error'),sort:!(!('@timestamp',desc)))"
+            summary: "{{ $labels.app }} rapporterer error i loggene"
           labels:
             namespace: teamsykmelding
             severity: danger
