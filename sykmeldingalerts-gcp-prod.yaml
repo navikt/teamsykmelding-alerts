@@ -169,3 +169,13 @@ spec:
           labels:
             namespace: teamsykmelding
             severity: danger
+        - alert: sykmeldinger-incoming-vs-apprec
+          expr: (syfosmmottak_incoming_message_count_total{app=~"syfosmmottak", namespace=~"teamsykmelding"} - syfosmapprec_apprec_count_total{app=~"syfosmapprec", namespace=~"teamsykmelding"}) > 100
+          for: 1h
+          annotations:
+            consequence: Emottak mottar ikke apprec på behandlet sykmelding
+            action: "Prøv å restart podene til syfosmmottak og syfosmapprec"
+            summary: "Emottak mottar ikke apprec på behandlet sykmelding"
+          labels:
+            namespace: teamsykmelding
+            severity: danger
