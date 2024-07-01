@@ -10,7 +10,7 @@ spec:
   - name: teamsykmelding dev-fss alarmer
     rules:
       - alert: syfosm-app-nede
-        expr: kube_deployment_status_replicas_available{deployment=~"smgcp-proxy|syfohelsenettproxy"} == 0
+        expr: kube_deployment_status_replicas_available{deployment=~"smgcp-proxy"} == 0
         for: 5m
         annotations:
           consequence: Application is unavailable
@@ -20,7 +20,7 @@ spec:
           namespace: teamsykmelding
           severity: danger
       - alert: syfosm-kontinuerlig-restart
-        expr: sum(increase(kube_pod_container_status_restarts_total{container=~"smgcp-proxy|syfohelsenettproxy"}[30m])) by (container) > 2
+        expr: sum(increase(kube_pod_container_status_restarts_total{container=~"smgcp-proxy"}[30m])) by (container) > 2
         for: 5m
         annotations:
           consequence: Application is unavailable
@@ -30,7 +30,7 @@ spec:
           namespace: teamsykmelding
           severity: danger
       - alert: syfosm-mangler-metrikker
-        expr: absent(up{app=~"smgcp-proxy|syfohelsenettproxy",job="kubernetes-pods"}) == 0
+        expr: absent(up{app=~"smgcp-proxy",job="kubernetes-pods"}) == 0
         for: 5m
         annotations:
           consequence: Application is unavailable
