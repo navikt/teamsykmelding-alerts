@@ -10,17 +10,12 @@ For mer informasjon om hvordan alarmene fungerer se:
 ## Utvikling
 ### GCP
 En kan bruke `https://prometheus.dev-gcp.nav.cloud.nais.io/` som hjelp til å teste queries.
-### FSS
-En kan bruke `https://prometheus.dev-fss.nav.cloud.nais.io/` som hjelp til å teste queries.
 
 ### Deploy prod
-Alle kode som er i master går til prod-gcp og prod-fss
+Alle kode som er i main går til prod-gcp
 ### GCP
 Dette kan evt gjøres manuelt med følgende kommando:
 `kubectl apply --context prod-gcp --namespace default -f sykmeldingalerts.yaml`
-### FSS
-Dette kan evt gjøres manuelt med følgende kommando:
-`kubectl apply --context prod-fss --namespace default -f sykmeldingalerts.yaml`
 
 ## Henvendelser
 Dette prosjeket er vedlikeholdt av [navikt/teamsykmelding](CODEOWNERS)
